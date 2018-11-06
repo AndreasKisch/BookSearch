@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookSearch.Controllers
 {
-    [Route("api/[controller]/")]
+    [Route("books/")]
     [ApiController]
     public class BookController : ControllerBase
     {

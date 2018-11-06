@@ -61,6 +61,7 @@ namespace BookSearch
                 b.Price = decimal.Parse(item.Element("price").Value, CultureInfo.InvariantCulture);
                 b.PublishDate = DateTime.Parse(item.Element("publish_date").Value);
                 b.Description = item.Element("description").Value;
+             
 
                 AddBook(b);
             }
