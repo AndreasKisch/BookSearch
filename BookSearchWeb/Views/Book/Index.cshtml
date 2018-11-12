@@ -4,7 +4,7 @@
     ViewData["Title"] = "Book Store";
 }
 
-<h2>Book Store</h2>
+
 <style>
     table {
         border: 1px solid #000000;
@@ -61,16 +61,27 @@
     th:hover {
         background: #8a9dfa;
     }
+
+    form {
+        height: 2%;
+        margin-top: 5%;
+    }
+
+    .sideContainer {
+        background: #8a9dfa;
+    }
 </style>
 
 
 
 
 
+<body class="container">
+    
+    <h2>Book Store</h2>
 
-<body>
-
-    <div class="container">
+    <a href="@Url.Action("Create")">Create new book</a>
+    <div>
         <form asp-controller="Book" asp-action="Index">
             <input id="bookInput" name="searchValue" type="text" placeholder="Search for title" />
             <input id="bookSubmit" type="submit" value="submit" />
@@ -143,6 +154,7 @@
 
     </div>
 </body>
+
 
 <script>
 
