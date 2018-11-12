@@ -1,63 +1,199 @@
 ﻿@model IEnumerable<BookSearchWeb.Book>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Book Store";
 }
 
-<h2>Book Search</h2>
+<h2>Book Store</h2>
+<style>
+    table {
+        border: 1px solid #000000;
+        width: 100%;
+    }
+
+    .filterInput {
+        width: 100%;
+    }
+
+    .filterContainer {
+        display: flex;
+        width: 100%;
+    }
+
+    .autherInput {
+        display: inline-block;
+    }
+
+    .titleInput {
+        display: inline-block;
+    }
+
+    .genreInput {
+        display: inline-block;
+    }
+
+    .smallWidth {
+        width: 12%;
+    }
+
+    .mediumWidth {
+        width: 17%;
+    }
+
+    .largeWidth {
+        width: 35%;
+    }
+
+    tr:nth-child(even) {
+        background: #9d9d9d
+    }
+
+    tr:nth-child(odd) {
+        background: #ffffff
+    }
+
+    .container {
+        width: 80%;
+        margin: auto;
+        overflow: hidden;
+    }
+
+    th:hover {
+        background: #8a9dfa;
+    }
+</style>
 
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Author)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Genre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PublishDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Author)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Genre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PublishDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+
+
+
+<body>
+
+    <div class="container">
+        <form asp-controller="Book" asp-action="Index">
+            <input id="bookInput" name="searchValue" type="text" placeholder="Search for title" />
+            <input id="bookSubmit" type="submit" value="submit" />
+        </form>
+
+        <div class="filterContainer">
+            <div class="autherInput mediumWidth">
+                <label for="authorTxt">Author:</label>
+                <input id="authorTxt" type="text" class="filterInput" />
+            </div>
+            <div class="titleInput largeWidth">
+                <label for="titleTxt">Title:</label>
+                <input id="titleTxt" type="text" class="filterInput" />
+            </div>
+            <div class="genreInput smallWidth">
+                <label for="genreTxt">Genre:</label>
+                <input id="genreTxt" type="text" class="filterInput" />
+            </div>
+        </div>
+
+        <table id="bookTable" class="table" border="1">
+            <thead>
+                <tr>
+                    <th onclick="sortTable(0)" class="mediumWidth">
+                        @Html.DisplayNameFor(model => model.Author)
+                    </th>
+                    <th onclick="sortTable(1)" class="largeWidth">
+                        @Html.DisplayNameFor(model => model.Title)
+
+                    </th>
+                    <th onclick="sortTable(2)" class="smallWidth">
+                        @Html.DisplayNameFor(model => model.Genre)
+                    </th>
+                    <th onclick="sortTable(3)">
+                        @Html.DisplayNameFor(model => model.Price)
+                    </th>
+                    <th onclick="sortTable(4)">
+                        @Html.DisplayNameFor(model => model.PublishDate)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="mediumWidth">
+                            @Html.DisplayFor(modelItem => item.Author)
+                        </td>
+                        <td class="largeWidth">
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td class="smallWidth">
+                            @Html.DisplayFor(modelItem => item.Genre)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PDate)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.Id })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</body>
+
+<script>
+
+    /*filter function to show filter result*/
+    function filterByCell(cellNumber, val) {
+        var value = val.toLowerCase();
+        $("#bookTable tbody tr").filter(function () {
+            $(this).toggle($(this)[0].cells[cellNumber].textContent.toLowerCase().indexOf(value) > -1)
+        });
+    }
+
+
+    /*Binds onkeyup to run filter function for assigned column*/
+    $(document).ready(function () {
+        $("#authorTxt").on("keyup", function () {
+            filterByCell(0, $(this).val())
+        });
+
+        $("#titleTxt").on("keyup", function () {
+            filterByCell(1, $(this).val())
+        });
+
+        $("#genreTxt").on("keyup", function () {
+            filterByCell(2, $(this).val())
+        });
+    });
+
+    function sortTable(cellIndex) {
+        var rows = $('#bookTable tbody  tr').get();
+        rows.sort(function (a, b) {
+
+            var A = $(a).children('td').eq(cellIndex).text().toUpperCase();
+            var B = $(b).children('td').eq(cellIndex).text().toUpperCase();
+
+            if (A < B) {
+                return -1;
+            }
+
+            if (A > B) {
+                return 1;
+            }
+
+            return 0;
+
+        });
+
+        $.each(rows, function (index, row) {
+            $('#bookTable').children('tbody').append(row);
+        });
+    }
+
+
+</script>
+

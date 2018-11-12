@@ -5,8 +5,13 @@ using System.Threading.Tasks;
 
 namespace BookSearchWeb
 {
+    /// <summary>
+    /// Model to display values in View
+    /// </summary>
     public class Book
     {
+        public string Id { get; set; }
+
         public string Author { get; set; }
 
         public string Title { get; set; }
@@ -17,7 +22,10 @@ namespace BookSearchWeb
 
         public DateTime PublishDate { get; set; }
 
+        public string PDate { get { return PublishDate.ToShortDateString(); } }
+
         public string Description { get; set; }
+
 
     }
 }

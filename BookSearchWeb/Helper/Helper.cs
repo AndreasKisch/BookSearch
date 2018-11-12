@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BookSearchWeb
 {
-    public class Helper
+    public class APIHelper
     {
         public static HttpClient BookAPI { get; set; }
 
